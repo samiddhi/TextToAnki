@@ -1,5 +1,6 @@
 from tkinter import *
 from tta_grammar import TextAnalyzer, Lexicon
+from transcript_srt import main as transcript_to_srt
 import re
 import whisper
 from tkinter import messagebox
@@ -106,7 +107,7 @@ class TextAnalysisApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Slovene to Anki")
-        self.lexicon = Lexicon()
+        self.lexicon = Lexicon(input("Language: "))
         self.setup_ui()
         self.create_menu()
 
@@ -159,6 +160,8 @@ class TextAnalysisApp:
         menubar.add_cascade(label="File", menu=file_menu)
         file_menu.add_command(label="Transcribe Audio",
                               command=self.transcribe_audio)
+        file_menu.add_command(label="Transcript -> .srt",
+                              command=self.srt)
 
         # Edit Menu
         edit_menu = Menu(menubar, tearoff=0)
@@ -179,6 +182,11 @@ class TextAnalysisApp:
         self.input_text.delete("1.0", END)
         self.input_text.insert("1.0", transcriptions)
 
+    def srt(self):
+        input_text = self.input_text.get("1.0", END)
+        srt_format: str = transcript_to_srt(input_text)
+        self.input_text.delete("1.0", END)
+        self.input_text.insert("1.0", srt_format)
 
     def remove_timestamps(self):
         # Get the current text from the input text widget

@@ -67,5 +67,7 @@ def split_json(json_file):
         json.dump(lower_keys, f, indent=4, ensure_ascii=False)
 
 if __name__ == "__main__":
-    read = r"C:\Users\sangha\Documents\Danny's\TextToAnki\data\lexicon.json"
-    write = r"C:\Users\sangha\Documents\Danny's\TextToAnki\data\reverse.json"
+    x = r"C:\Users\sangha\Documents\Danny's\TextToAnki\data\lexicon.json"
+    read = "pali_forward_mapping.json"
+    write = "pali_backward_mapping.json"
+    reverse_json_writer(read, write)
