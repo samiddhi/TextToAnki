@@ -27,21 +27,21 @@
 
 ---
 ## Files needed:
-   - 
+   - .
 
 ---
 ## Process:
    1. Make Slo lexicon .jsons using: 
-      1. [lemma_forms_parser](temp_tools/json_maker.py)
-      2. [reverse_json_writer](temp_tools/json_maker.py)
-      3. [split_json()](temp_tools/json_maker.py)
-      - Note: requires [Sloleks3.0](https://www.clarin.si/repository/xmlui/handle/11356/1745) download
-   2. Make Pali lexicon .jsons using:
-      1. Download dpd.db from most recent (DPD Release)[https://github.com/digitalpalidictionary/digitalpalidictionary/releases]
-      2. Generate json with [dpd_extractor.py](C:\Users\sangha\Documents\Danny's\TextToAnki\temp_tools\dpd_extractor.py)
+      1. [`lemma_forms_parser`](temp_tools/json_maker.py)
+      2. [`reverse_json_writer`](temp_tools/json_maker.py)
+      3. [`split_json()`](temp_tools/json_maker.py)
+      - Note: requires download [Sloleks3.0](https://www.clarin.si/repository/xmlui/handle/11356/1745)
+   2. Make Pali lexicon .jsons with:
+      1. Download dpd.db from most recent [DPD Release](https://github.com/digitalpalidictionary/digitalpalidictionary/releases)
+      2. Generate json with [`dpd_extractor.py`](C:\Users\sangha\Documents\Danny's\TextToAnki\temp_tools\dpd_extractor.py)
 ---
 ## Language Packs:
- - packs should be titled with [ISO 639 Set 1 Language Codes](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)
+ - [ISO 639 Set 1 Language Codes](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)
    - "zz" reserved for "Other" or non-specialized/universal functionality
  
 ### Resources
