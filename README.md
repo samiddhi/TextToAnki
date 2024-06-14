@@ -40,7 +40,10 @@
       1. Download dpd.db from most recent (DPD Release)[https://github.com/digitalpalidictionary/digitalpalidictionary/releases]
       2. Generate json with [dpd_extractor.py](C:\Users\sangha\Documents\Danny's\TextToAnki\temp_tools\dpd_extractor.py)
 ---
-
+## Language Packs:
+ - packs should be titled with [ISO 639 Set 1 Language Codes](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)
+   - "zz" reserved for "Other" or non-specialized/universal functionality
+ 
 ### Resources
   - The G.O.A.T. [Slovenščina.eu](https://www.slovenscina.eu/)
   - [GIT Large File Storage (LFS)](https://chat.openai.com/share/bbe21280-3637-4c5d-83f4-89976049507e)

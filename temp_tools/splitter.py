@@ -8,10 +8,10 @@ def split_json(json_file: str) -> None:
     upper_keys = {k: v for k, v in data.items() if k[0].isupper()}
     lower_keys = {k: v for k, v in data.items() if k[0].islower()}
 
-    with open('lexicon_upper.json', 'w', encoding='utf-8') as f:
+    with open('uppercase_forward.json', 'w', encoding='utf-8') as f:
         json.dump(upper_keys, f, indent=4, ensure_ascii=False)
 
-    with open('lexicon_lower.json', 'w', encoding='utf-8') as f:
+    with open('forward_map.json', 'w', encoding='utf-8') as f:
         json.dump(lower_keys, f, indent=4, ensure_ascii=False)
 
 

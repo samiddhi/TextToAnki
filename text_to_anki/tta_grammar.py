@@ -1,77 +1,70 @@
 import json
 import nltk
+import os
 
 from typing import List, Dict, Set
 from collections import Counter
 
 FILTER_KNOWN = True
-RETURN_KNOWN_VARIANTS = False
 
 class Language:
     def __init__(self, lang: str):
-        if lang.lower() == "pali":
-            self.standard: str = (
-                r"C:\Users\sangha\Documents\Danny's\TextToAnki"
-                r"\data\pali_lex\pali_forward_mapping.json"
-            )
-            self.reverse: str = (
-                r"C:\Users\sangha\Documents\Danny's\TextToAnki"
-                r"\data\pali_lex\pali_backward_mapping.json"
-            )
-            self.known = None
-        elif lang.lower() == "slovene":
-            self.standard: str = (
-                r"C:\Users\sangha\Documents\Danny's\TextToAnki"
-                r"\data\slovene_lex\lexicon_lower.json"
-            )
-            self.reverse: str = (
-                r"C:\Users\sangha\Documents\Danny's\TextToAnki"
-                r"\data\slovene_lex\reverse_lower.json"
-            )
-            self.known: str = (
-                r"C:\Users\sangha\Documents\Danny's\TextToAnki\data"
-                r"\slovene_lex\known.csv"
-            )
-        else:
-            print(f"Language \"{lang}\" not implemented")
-            raise NotImplementedError
+        base_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..'))
+        data_path = os.path.join(base_path, 'data', 'language_packs', lang)
 
+        std_path: str = os.path.join(data_path, 'lex', 'forward_map.json')
+        self.standard: str = std_path if os.path.exists(std_path) else None
+
+        rev_path: str = os.path.join(data_path, 'lex', 'backward_map.json')
+        if os.path.exists(rev_path):
+            self.reverse: str = rev_path
+        elif self.standard is not None:
+            raise NotImplementedError("Reverse json generator from "
+                                      "SloDictGen Project not yet implemented")
+        else:
+            self.reverse = None
+
+        exclusion_path: str = os.path.join(data_path, 'lex', 'exclusion_list.csv')
+        self.exclusion_list: str = exclusion_path if os.path.exists(exclusion_path) else None
 
 class Lexicon:
-    """Class of sloleks lemmas and their wordform lists."""
+    """Class of lemmas and their wordform lists."""
 
     def __init__(
             self,
-            lang: str
+            lang: str,
+            settings: Dict
     ) -> None:
         language = Language(lang)
 
 
-        """Initialize the lexicon with data loaded from a JSON file."""
-        with open(language.reverse, "r", encoding="utf-8") as reverse:
-            form_lemmas: Dict[str, List[str]] = json.load(reverse)
-            self.data: Dict[str, List[str]] = form_lemmas
 
-        if FILTER_KNOWN and (language.known is not None):
-            with open(language.known, "r", encoding="utf-8") as known_file:
+        """Initialize the lexicon with data loaded from a JSON file."""
+        if language.standard is not None:
+            with open(language.reverse, "r", encoding="utf-8") as reverse:
+                form_lemmas: Dict[str, List[str]] = json.load(reverse)
+                self.data: Dict[str, List[str]] = form_lemmas
+        else:
+            self.data = {}
+
+
+
+        if settings.get("exclusion_list_filtering") and (language.exclusion_list is not None):
+            with open(language.exclusion_list, "r", encoding="utf-8") as known_file:
                 self.all_known: List[str] = [line.split(',')[0].strip() for
                                              line in
                                              known_file]
         else:
             self.all_known: List[str] = []
 
-        # Return all variants of terms in known.json
-        if RETURN_KNOWN_VARIANTS:
-            with open(language.standard, "r", encoding="utf-8") as std:
-                lemma_forms: Dict[str, List[str]] = json.load(std)
-            for i in self.all_known:
-                print(i)
-                for j in lemma_forms.get(i, []):
-                    print(j)
 
-    def find(self, word: str) -> Set[str]:
-        return set([item for item in self.data.get(word, []) if item not in
-                    self.all_known])
+    def find_lemmas(self, word: str) -> Set[str]:
+        lemmas = self.data.get(word, [])
+        unknown_lemmas = set(lemmas) - set(self.all_known)
+
+        return unknown_lemmas if unknown_lemmas else set() if lemmas else {
+            f'*{word}'}
 
 
 class TextAnalyzer:
@@ -99,6 +92,6 @@ class TextAnalyzer:
         for token in self.tokens:
             if any(char.isdigit() for char in token):
                 continue
-            found_lemmas = lex.find(token.lower())
+            found_lemmas = lex.find_lemmas(token.lower())
             lemmas.extend(found_lemmas)
         return lemmas

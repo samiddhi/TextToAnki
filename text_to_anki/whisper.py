@@ -4,6 +4,7 @@ from pydub import AudioSegment
 from openai import OpenAI
 
 import json
+import os
 
 
 class AudioTranscriber:
@@ -88,8 +89,9 @@ def main(
         file_path: str = None,
         segment_length: int = 15
 ):
-    user_path = (r"C:\Users\sangha\Documents\Danny's\TextToAnki\data\users"
-                 r"\user.json")
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    data_path = os.path.join(base_path, 'data')
+    user_path = os.path.join(data_path, "users", "user.json")
     with open(user_path, "r", encoding="utf-8") as user_data:
         user: Dict = json.load(user_data)
         user_api = user.get("api", None)

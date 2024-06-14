@@ -23,12 +23,12 @@ if __name__ == "__main__":
     # Convert DataFrame to a dictionary mapping lemmas to lists of inflections
     forward_dict = df_forward.set_index('lemma_1')['inflections'].to_dict()
 
-    forward_mapping_filename = 'pali_forward_mapping.json'
+    forward_mapping_filename = 'forward_map.json'
     # Save to JSON with nice formatting using the json module
     with open(forward_mapping_filename, 'w', encoding='utf-8') as f:
         json.dump(forward_dict, f, ensure_ascii=False, indent=4)
 
-    backward_mapping_filename = 'pali_backward_mapping.json'
+    backward_mapping_filename = 'backward_map.json'
     json_maker.reverse_json_writer(
         read=forward_mapping_filename,
         write=backward_mapping_filename
